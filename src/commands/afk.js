@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     name: 'afk',
     description: 'Sets your status to Away From Keyboard 🕊️',
     async execute(message, args, client) {
@@ -7,6 +7,6 @@ module.exports = {
         if (!client.afkStatus) client.afkStatus = new Map();
         
         client.afkStatus.set(message.author.id, reason);
-        message.reply(`🕊️ You are now AFK: **${reason}**`);
+        await message.reply(`🕊️ You are now AFK: **${reason}**`);
     }
 };
