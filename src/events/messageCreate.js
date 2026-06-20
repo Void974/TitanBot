@@ -27,6 +27,24 @@ export default {
     try {
       if (message.author.bot || !message.guild) return;
 
+              // --- START OF AFK LOGIC ---
+        // 1. Remove AFK status if the user speaks
+        if (client.afkStatus && client.afkStatus.has(message.author.id)) {
+            client.afkStatus.delete(message.author.id);
+            await message.reply(`🕊️ Welcome back <@${message.author.id}>! I have removed your AFK status.`);
+        }
+
+        // 2. Check if a mentioned user is AFK
+        if (message.mentions.users.size > 0 && client.afkStatus) {
+            for (const [userId, user] of message.mentions.users) {
+                if (client.afkStatus.has(userId)) {
+                    const reason = client.afkStatus.get(userId);
+                    await message.reply(`🕊️ **${user.username}** is currently AFK: ${reason}`);
+                }
+            }
+        }
+        // --- END OF AFK LOGIC ---
+
       logger.debug(`Message received from ${message.author.tag}: ${message.content}`);
 
       const countingProcessed = await handleCountingGame(message, client);
